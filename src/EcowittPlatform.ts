@@ -5,6 +5,7 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { GW1000 } from './GW1000';
 import { WH25 } from './WH25';
 import { WH31 } from './WH31';
+import { WN34 } from './WN34';
 import { WH41 } from './WH41';
 import { WH51 } from './WH51';
 import { WH55 } from './WH55';
@@ -214,6 +215,12 @@ export class EcowittPlatform implements DynamicPlatformPlugin {
         this.addSensorType(dataReport[`batt${channel}`] !== undefined, 'WH31', channel);
       }
     }
+    
+    if (!this.config?.th?.hide) {
+      for (let channel = 1; channel <= 8; channel++) {
+        this.addSensorType(dataReport[`tf_batt${channel}`] !== undefined, 'WN34', channel);
+      }
+    }
 
     if (!this.config?.pm25?.hide) {
       for (let channel = 1; channel <= 4; channel++) {
@@ -290,6 +297,10 @@ export class EcowittPlatform implements DynamicPlatformPlugin {
 
           case 'WH31':
             sensor.accessory = new WH31(this, accessory, sensor.channel);
+            break;
+          
+          case 'WN34':
+            sensor.accessory = new WN32(this, accessory, sensor.channel);
             break;
 
           case 'WH41':
